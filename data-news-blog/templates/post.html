@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — The Data News{% endblock %}
+
+{% block content %}
+
+  <a href="{{ url_for('index') }}" class="back-link">&larr; Back to all posts</a>
+
+  <article class="post-full">
+    {% if post.category %}
+      <span class="post-category">{{ post.category }}</span>
+    {% endif %}
+    <h1>{{ post.title }}</h1>
+    <span class="post-date">{{ post.created_at[:10] }}</span>
+
+    <div class="post-content">
+      <p>{{ post.content }}</p>
+    </div>
+
+    {% if post.source_url %}
+      <a href="{{ post.source_url }}" class="source-link" target="_blank" rel="noopener">
+        Read original source &rarr;
+      </a>
+    {% endif %}
+  </article>
+
+{% endblock %}

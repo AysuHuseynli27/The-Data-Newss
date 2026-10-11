@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}The Data News 📰{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="auth-corner">
+      {% if session.get('user_email') %}
+        <a href="{{ url_for('add_post') }}">+ New Post</a>
+        <a href="{{ url_for('logout') }}">Log out</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Log in</a>
+      {% endif %}
+    </div>
+    <h1>The Data News 📰</h1>
+    <p>Daily bytes on data, AI, and tech careers</p>
+  </header>
+
+  <nav class="nav-bar">
+    <a href="{{ url_for('index') }}">All</a>
+    <a href="{{ url_for('category', category_name='data') }}">Data</a>
+    <a href="{{ url_for('category', category_name='ai') }}">AI</a>
+    <a href="{{ url_for('category', category_name='career') }}">Career</a>
+  </nav>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    &copy; 2026 The Data News — built by Aysu
+  </footer>
+
+</body>
+</html>

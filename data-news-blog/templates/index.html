@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}The Data News 📰{% endblock %}
+
+{% block content %}
+
+  {% if posts %}
+    <div class="post-list">
+      {% for post in posts %}
+        <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-card">
+          {% if post.category %}
+            <span class="post-category">{{ post.category }}</span>
+          {% endif %}
+          <h2>{{ post.title }}</h2>
+          <p class="post-excerpt">{{ post.content[:140] }}{% if post.content|length > 140 %}...{% endif %}</p>
+          <span class="post-date">{{ post.created_at[:10] }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No posts yet. The first one is coming soon 🌱</p>
+    </div>
+  {% endif %}
+
+{% endblock %}
