@@ -31,6 +31,12 @@
         Read original source &rarr;
       </a>
     {% endif %}
+
+    {% if session.get('user_email') and post.author == (session.get('user_name') or session.get('user_email')) %}
+      <form method="POST" action="{{ url_for('delete_post', post_id=post.id) }}" class="delete-form" onsubmit="return confirm('Bu yazını silmək istədiyinə əminsən?');">
+        <button type="submit" class="btn-danger">Delete post</button>
+      </form>
+    {% endif %}
   </article>
 
 {% endblock %}

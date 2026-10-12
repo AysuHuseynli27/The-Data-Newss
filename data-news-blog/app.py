@@ -137,5 +137,29 @@ def add_post():
     return render_template("add_post.html")
 
 
+@app.route("/delete/<int:post_id>", methods=["POST"])
+@login_required
+def delete_post(post_id):
+    response = (
+        supabase.table("posts")
+        .select("author")
+        .eq("id", post_id)
+        .execute()
+    )
+    if not response.data:
+        abort(404)
+
+    post_author = response.data[0].get("author")
+    current_user = session.get("user_name") or session.get("user_email")
+
+    if post_author != current_user:
+        flash("You can only delete your own posts.")
+        return redirect(url_for("post_detail", post_id=post_id))
+
+    supabase.table("posts").delete().eq("id", post_id).execute()
+    flash("Post deleted.")
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
