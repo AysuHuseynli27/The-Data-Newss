@@ -50,23 +50,15 @@ main { max-width: 1100px; margin: 0 auto; padding: 2.2rem 1.5rem 4rem; }
 
 .section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 1.2rem; }
 
-.hero-banner { position: relative; display: block; border-radius: var(--radius); overflow: hidden; height: 320px; margin-bottom: 3rem; box-shadow: var(--shadow-lg); text-decoration: none; }
-.hero-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.hero-banner .placeholder-bg { width: 100%; height: 100%; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); }
-.hero-banner.cat-career .placeholder-bg { background: linear-gradient(135deg, var(--accent-3), var(--accent-1)); }
-
-.hero-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,16,35,0.85) 0%, rgba(20,16,35,0.4) 55%, rgba(20,16,35,0.05) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.8rem; }
-.hero-eyebrow { color: #ffd9c4; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
-.hero-overlay h1 { color: white; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; max-width: 640px; }
-.hero-overlay p { color: rgba(255,255,255,0.85); font-size: 0.9rem; margin-top: 0.7rem; max-width: 560px; }
-
-.hero-arrow { position: absolute; bottom: 1.8rem; right: 1.8rem; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; }
+.cover-banner { position: relative; border-radius: var(--radius); overflow: hidden; height: 200px; margin-bottom: 2.5rem; box-shadow: var(--shadow-lg); background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%); }
+.cover-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; }
+.cover-overlay .brand-mark.large { width: 44px; height: 44px; font-size: 1rem; border-radius: 12px; background: rgba(255,255,255,0.22); margin-bottom: 0.8rem; }
+.cover-overlay h1 { color: white; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; }
+.cover-overlay p { color: rgba(255,255,255,0.9); font-size: 0.9rem; margin-top: 0.4rem; }
 
 @media (min-width: 720px) {
-  .hero-banner { height: 420px; }
-  .hero-overlay { padding: 2.2rem; }
-  .hero-overlay h1 { font-size: 2rem; }
-  .hero-arrow { bottom: 2.2rem; right: 2.2rem; width: 46px; height: 46px; }
+  .cover-banner { height: 240px; }
+  .cover-overlay h1 { font-size: 2.1rem; }
 }
 
 .post-list { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
