@@ -6,12 +6,21 @@
 
   <a href="{{ url_for('index') }}" class="back-link">&larr; Back to all posts</a>
 
-  <article class="post-full">
+  <article class="post-full cat-{{ post.category }}">
+    {% if post.image_url %}
+      <img src="{{ post.image_url }}" alt="" class="post-full-img">
+    {% endif %}
+
     {% if post.category %}
       <span class="post-category">{{ post.category }}</span>
     {% endif %}
     <h1>{{ post.title }}</h1>
-    <span class="post-date">{{ post.created_at[:10] }}</span>
+    <div class="post-meta">
+      <span class="dot"></span>
+      <span class="cat-label">{{ post.author or "The Data News" }}</span>
+      <span class="sep">&middot;</span>
+      <span class="post-date">{{ post.created_at[:10] }}</span>
+    </div>
 
     <div class="post-content">
       <p>{{ post.content }}</p>

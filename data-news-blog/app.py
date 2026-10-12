@@ -27,12 +27,14 @@ def login_required(f):
 
 @app.route("/")
 def index():
-    response = (
-        supabase.table("posts")
-        .select("*")
-        .order("created_at", desc=True)
-        .execute()
-    )
+    search_q = request.args.get("q", "").strip()
+
+    query = supabase.table("posts").select("*").order("created_at", desc=True)
+
+    if search_q:
+        query = query.or_(f"title.ilike.%{search_q}%,content.ilike.%{search_q}%")
+
+    response = query.execute()
     posts = response.data
     return render_template("index.html", posts=posts)
 
@@ -75,11 +77,32 @@ def login():
             )
             if result.user:
                 session["user_email"] = result.user.email
+                session["user_name"] = (result.user.user_metadata or {}).get("name") or result.user.email.split("@")[0]
                 return redirect(url_for("add_post"))
         except Exception:
             flash("Wrong email or password.")
             return redirect(url_for("login"))
     return render_template("login.html")
+
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        try:
+            supabase.auth.sign_up({
+                "email": email,
+                "password": password,
+                "options": {"data": {"name": name}},
+            })
+            flash("Hesab yaradildi! Indi daxil ola bilersen.")
+            return redirect(url_for("login"))
+        except Exception:
+            flash("Qeydiyyat alinmadi, yeniden cehd et.")
+            return redirect(url_for("signup"))
+    return render_template("signup.html")
 
 
 @app.route("/logout")
@@ -96,12 +119,16 @@ def add_post():
         content = request.form.get("content")
         category_value = request.form.get("category")
         source_url = request.form.get("source_url") or None
+        image_url = request.form.get("image_url") or None
+        author = session.get("user_name") or session.get("user_email")
 
         supabase.table("posts").insert({
             "title": title,
             "content": content,
             "category": category_value,
             "source_url": source_url,
+            "image_url": image_url,
+            "author": author,
         }).execute()
 
         flash("Post published!")

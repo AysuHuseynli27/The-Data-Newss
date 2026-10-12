@@ -2,32 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="google-site-verification" content="XXPrueMi0NDTSRoW_r8YSO93KH0bs6fmQvS9W4RcXrE" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}The Data News 📰{% endblock %}</title>
+  <title>{% block title %}The Data News{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="auth-corner">
-      {% if session.get('user_email') %}
-        <a href="{{ url_for('add_post') }}">+ New Post</a>
-        <a href="{{ url_for('logout') }}">Log out</a>
-      {% else %}
-        <a href="{{ url_for('login') }}">Log in</a>
-      {% endif %}
-    </div>
-    <h1>The Data News 📰</h1>
-    <p>Daily bytes on data, AI, and tech careers</p>
-  </header>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="{{ url_for('index') }}" class="brand">
+        <span class="brand-mark">DN</span>
+        <span class="brand-word">The Data News</span>
+      </a>
 
-  <nav class="nav-bar">
-    <a href="{{ url_for('index') }}">All</a>
-    <a href="{{ url_for('category', category_name='data') }}">Data</a>
-    <a href="{{ url_for('category', category_name='ai') }}">AI</a>
-    <a href="{{ url_for('category', category_name='career') }}">Career</a>
-  </nav>
+      <form class="search-bar" method="GET" action="{{ url_for('index') }}">
+        <input type="text" name="q" placeholder="Axtar..." value="{{ request.args.get('q', '') }}">
+      </form>
+
+      <div class="auth-corner">
+        {% if session.get('user_email') %}
+          <a href="{{ url_for('add_post') }}" class="btn-fill">+ New Post</a>
+          <a href="{{ url_for('logout') }}" class="btn-text">Log out</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="btn-outline">Log in</a>
+          <a href="{{ url_for('signup') }}" class="btn-fill">Sign up</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
 
   <main>
     {% with messages = get_flashed_messages() %}
@@ -42,7 +47,8 @@
   </main>
 
   <footer>
-    &copy; 2026 The Data News — built by Aysu
+    <span class="brand-mark small">DN</span>
+    <span>&copy; 2026 The Data News</span>
   </footer>
 
 </body>

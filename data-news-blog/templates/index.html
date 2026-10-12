@@ -1,25 +1,88 @@
 {% extends "base.html" %}
 
-{% block title %}The Data News 📰{% endblock %}
+{% block title %}The Data News{% endblock %}
 
 {% block content %}
 
+  {% set search_q = request.args.get('q', '') %}
+
   {% if posts %}
-    <div class="post-list">
-      {% for post in posts %}
-        <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-card">
-          {% if post.category %}
-            <span class="post-category">{{ post.category }}</span>
-          {% endif %}
-          <h2>{{ post.title }}</h2>
-          <p class="post-excerpt">{{ post.content[:140] }}{% if post.content|length > 140 %}...{% endif %}</p>
-          <span class="post-date">{{ post.created_at[:10] }}</span>
-        </a>
-      {% endfor %}
-    </div>
+
+    {% if search_q %}
+      <p class="section-label">"{{ search_q }}" üçün nəticələr</p>
+      <div class="post-list">
+        {% for post in posts %}
+          <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-card cat-{{ post.category }}">
+            {% if post.image_url %}
+              <img src="{{ post.image_url }}" alt="" class="post-img">
+            {% else %}
+              <div class="post-img placeholder"></div>
+            {% endif %}
+            <div class="post-card-body">
+              <h2>{{ post.title }}</h2>
+              <p class="post-excerpt">{{ post.content[:140] }}{% if post.content|length > 140 %}...{% endif %}</p>
+              <div class="post-meta">
+                <span class="dot"></span>
+                <span class="cat-label">{{ post.author or post.category }}</span>
+                <span class="sep">&middot;</span>
+                <span class="post-date">{{ post.created_at[:10] }}</span>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      {% set featured = posts[0] %}
+      {% set rest = posts[1:] %}
+
+      <a href="{{ url_for('post_detail', post_id=featured.id) }}" class="hero-banner cat-{{ featured.category }}">
+        {% if featured.image_url %}
+          <img src="{{ featured.image_url }}" alt="">
+        {% else %}
+          <div class="placeholder-bg"></div>
+        {% endif %}
+        <div class="hero-overlay">
+          <span class="hero-eyebrow">Featured{% if featured.category %} &middot; {{ featured.category }}{% endif %}</span>
+          <h1>{{ featured.title }}</h1>
+          <p>{{ featured.content[:160] }}{% if featured.content|length > 160 %}...{% endif %}</p>
+        </div>
+        <div class="hero-arrow">&rarr;</div>
+      </a>
+
+      {% if rest %}
+        <p class="section-label">Son yazılar</p>
+        <div class="post-list">
+          {% for post in rest %}
+            <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-card cat-{{ post.category }}">
+              {% if post.image_url %}
+                <img src="{{ post.image_url }}" alt="" class="post-img">
+              {% else %}
+                <div class="post-img placeholder"></div>
+              {% endif %}
+              <div class="post-card-body">
+                <h2>{{ post.title }}</h2>
+                <p class="post-excerpt">{{ post.content[:140] }}{% if post.content|length > 140 %}...{% endif %}</p>
+                <div class="post-meta">
+                  <span class="dot"></span>
+                  <span class="cat-label">{{ post.author or post.category }}</span>
+                  <span class="sep">&middot;</span>
+                  <span class="post-date">{{ post.created_at[:10] }}</span>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+
   {% else %}
     <div class="empty-state">
-      <p>No posts yet. The first one is coming soon 🌱</p>
+      {% if search_q %}
+        <p>"{{ search_q }}" Nothing was found.</p>
+      {% else %}
+        <p>No posts yet. The first one is coming soon 🌱</p>
+      {% endif %}
     </div>
   {% endif %}
 
